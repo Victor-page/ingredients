@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Card from '../UI/Card';
 import './Search.css';
 
@@ -7,26 +7,32 @@ const url =
 
 const Search = React.memo(({ onLoadIngredients }) => {
   const [enteredFilter, setEnteredFilter] = useState('');
+  const inputRef = useRef();
 
   useEffect(() => {
-    const query =
-      enteredFilter.length === 0
-        ? ''
-        : `?orderBy="title"&equalTo="${enteredFilter}"`;
-    fetch(url + query)
-      .then((response) => response.json())
-      .then((responseData) => {
-        const loadedIngredients = [];
-        for (const key in responseData) {
-          if (Object.hasOwnProperty.call(responseData, key)) {
-            const { title, amount } = responseData[key];
-            loadedIngredients.push({ id: key, title, amount });
+    setTimeout(() => {
+      if (enteredFilter !== inputRef.current.value) {
+        return;
+      }
+      const query =
+        enteredFilter.length === 0
+          ? ''
+          : `?orderBy="title"&equalTo="${enteredFilter}"`;
+      fetch(url + query)
+        .then((response) => response.json())
+        .then((responseData) => {
+          const loadedIngredients = [];
+          for (const key in responseData) {
+            if (Object.hasOwnProperty.call(responseData, key)) {
+              const { title, amount } = responseData[key];
+              loadedIngredients.push({ id: key, title, amount });
+            }
           }
-        }
-        onLoadIngredients(loadedIngredients);
-      })
-      .catch(console.log);
-  }, [enteredFilter, onLoadIngredients]);
+          onLoadIngredients(loadedIngredients);
+        })
+        .catch(console.log);
+    }, 500);
+  }, [enteredFilter, onLoadIngredients, inputRef]);
 
   return (
     <section className="search">
@@ -34,6 +40,7 @@ const Search = React.memo(({ onLoadIngredients }) => {
         <div className="search-input">
           <label>Filter by Title</label>
           <input
+            ref={inputRef}
             type="text"
             value={enteredFilter}
             onChange={(event) => setEnteredFilter(event.target.value)}
