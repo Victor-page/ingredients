@@ -10,7 +10,7 @@ const Search = React.memo(({ onLoadIngredients }) => {
   const inputRef = useRef();
 
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (enteredFilter !== inputRef.current.value) {
         return;
       }
@@ -32,6 +32,10 @@ const Search = React.memo(({ onLoadIngredients }) => {
         })
         .catch(console.log);
     }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [enteredFilter, onLoadIngredients, inputRef]);
 
   return (

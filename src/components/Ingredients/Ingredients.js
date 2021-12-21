@@ -3,9 +3,6 @@ import IngredientList from './IngredientList';
 import IngredientForm from './IngredientForm';
 import Search from './Search';
 
-const url =
-  'https://react-http-7aca5-default-rtdb.firebaseio.com/ingredients.json';
-
 const Ingredients = () => {
   const [ingredients, setIngredients] = useState([]);
 
@@ -15,11 +12,14 @@ const Ingredients = () => {
   );
 
   const addIngredientHandler = (ingredient) => {
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(ingredient),
-      headers: { 'Content-Type': 'application/json' },
-    })
+    fetch(
+      'https://react-http-7aca5-default-rtdb.firebaseio.com/ingredients.json',
+      {
+        method: 'POST',
+        body: JSON.stringify(ingredient),
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
       .then((response) => response.json())
       .then(({ name: id }) => {
         setIngredients((prevIngredients) => [
@@ -30,10 +30,18 @@ const Ingredients = () => {
       .catch(console.log);
   };
 
-  const removeIngredientHandler = (id) =>
-    setIngredients((prevIngredients) =>
-      prevIngredients.filter((prevIngredient) => prevIngredient.id !== id)
-    );
+  const removeIngredientHandler = (id) => {
+    fetch(
+      `https://react-http-7aca5-default-rtdb.firebaseio.com/ingredients/${id}.json`,
+      { method: 'DELETE' }
+    )
+      .then(() =>
+        setIngredients((prevIngredients) =>
+          prevIngredients.filter((prevIngredient) => prevIngredient.id !== id)
+        )
+      )
+      .catch(console.log);
+  };
 
   return (
     <div className="App">
