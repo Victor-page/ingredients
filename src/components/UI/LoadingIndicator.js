@@ -1,3 +1,4 @@
+import React from 'react';
 import './LoadingIndicator.css';
 
 const LoadingIndicator = () => (
