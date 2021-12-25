@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import './ErrorModal.css';
 
-const ErrorModal = React.memo(({ onClose, children }) => (
+const ErrorModal = memo(({ onClose, children }) => (
   <React.Fragment>
     <div className="backdrop" onClick={onClose} />
     <div className="error-modal">

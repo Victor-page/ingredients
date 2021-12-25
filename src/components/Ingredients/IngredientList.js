@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 
 import './IngredientList.css';
 
@@ -20,4 +20,4 @@ const IngredientList = ({ ingredients, onRemoveItem }) => {
   );
 };
 
-export default memo(IngredientList);
+export default IngredientList;
